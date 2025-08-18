@@ -1,10 +1,7 @@
-
-
 import java.io.FileNotFoundException;
 
 /**
- *  Tests Nbody.readBodies. Reads in ./data/planets.txt and checks output of
- *  readBodies().
+ * Tests the NBody.readBodies method.
  */
 public class TestReadBodies {
 
@@ -12,89 +9,70 @@ public class TestReadBodies {
         return Math.abs(expected - actual) <= eps * Math.max(expected, actual);
     }
 
-    /** Checks to make sure that readBodies() works perfectly. 
-     * @throws FileNotFoundException */
     private static String checkReadBodies() throws FileNotFoundException {
         System.out.println("Checking readBodies...");
-        String planetsTxtPath = "./data/planets.txt";
-        /* If the following line fails to compile, you probably need to make
-         * a certain method static! */
-        CelestialBody[] actualOutput = NBody.readBodies(planetsTxtPath);
+        
+        CelestialBody[] bodies = NBody.readBodies("./data/planets.txt");
 
-        /* Check the simple things: */
-        if (actualOutput == null) {
-            return "FAIL: readBodies(); null output";
+        if (bodies == null) {
+            return "FAIL: readBodies() returned null";
         }
-        if (actualOutput.length != 5) {
-            return "FAIL: readBodies().length: Expected 5 and you gave " + actualOutput.length;
+        if (bodies.length != 5) {
+            return "FAIL: readBodies().length: Expected 5 and you gave " + bodies.length;
         }
 
-        /* Check to make sure every body exists, plus random spot checks */
-        boolean foundEarth = false;
-        boolean foundMars = false;
-        boolean foundMercury = false;
-        boolean foundSun = false;
-        boolean foundVenus = false;
-        boolean randomChecksOkay = true;
-        for (CelestialBody p : actualOutput) {
-            if ("earth.gif".equals(p.getName())) {
+        boolean foundEarth = false, foundMars = false, foundMercury = false;
+        boolean foundSun = false, foundVenus = false;
+        boolean dataCorrect = true;
+        
+        for (CelestialBody body : bodies) {
+            String name = body.getName();
+            if ("earth.gif".equals(name)) {
                 foundEarth = true;
-                if (!doubleEquals(p.getX(), 1.4960e+11, 0.01)) {
-                    System.out.println("Advice: Your Earth doesn't have the right xxPos!");
-                    randomChecksOkay = false;
+                if (!doubleEquals(body.getX(), 1.4960e+11, 0.01)) {
+                    System.out.println("Earth doesn't have the correct x position!");
+                    dataCorrect = false;
                 }
-            } else if ("mars.gif".equals(p.getName())) {
+            } else if ("mars.gif".equals(name)) {
                 foundMars = true;
-            } else if ("mercury.gif".equals(p.getName())) {
+            } else if ("mercury.gif".equals(name)) {
                 foundMercury = true;
-                if (!doubleEquals(p.getY(), 0, 0.01)) {
-                    System.out.println("Advice: Your Mercury doesn't have the right yyPos!");
-                    randomChecksOkay = false;
+                if (!doubleEquals(body.getY(), 0, 0.01)) {
+                    System.out.println("Mercury doesn't have the correct y position!");
+                    dataCorrect = false;
                 }
-            } else if ("sun.gif".equals(p.getName())) {
+            } else if ("sun.gif".equals(name)) {
                 foundSun = true;
-            } else if ("venus.gif".equals(p.getName())) {
+            } else if ("venus.gif".equals(name)) {
                 foundVenus = true;
-                if (!doubleEquals(p.getMass(), 4.8690e+24, 0.01)) {
-                    System.out.println("Advice: Your Venus doesn't have the right mass!");
-                    randomChecksOkay = false;
+                if (!doubleEquals(body.getMass(), 4.8690e+24, 0.01)) {
+                    System.out.println("Venus doesn't have the correct mass!");
+                    dataCorrect = false;
                 }
-            }
-            else {
-                System.out.printf("unexpected planet file: '%s'\n",p.getName());
+            } else {
+                System.out.printf("Unexpected planet file: '%s'\n", name);
             }
         }
 
-        /* Build up a nice list of missing bodies */
         String missingBodies = "";
-        if (!foundEarth) {
-            missingBodies += "Earth, ";
-        }
-        if (!foundMars) {
-            missingBodies += "Mars, ";
-        }
-        if (!foundMercury) {
-            missingBodies += "Mercury, ";
-        }
-        if (!foundSun) {
-            missingBodies += "Sun, ";
-        }
-        if (!foundVenus) {
-            missingBodies += "Venus, ";
-        }
+        if (!foundEarth) missingBodies += "Earth, ";
+        if (!foundMars) missingBodies += "Mars, ";
+        if (!foundMercury) missingBodies += "Mercury, ";
+        if (!foundSun) missingBodies += "Sun, ";
+        if (!foundVenus) missingBodies += "Venus, ";
+        
         if (missingBodies.length() > 0) {
-            String answer = "FAIL: readBodies(); Missing these bodies: ";
-            answer += missingBodies.substring(0, missingBodies.length() - 2);
-            return answer;
+            return "FAIL: readBodies() missing: " + missingBodies.substring(0, missingBodies.length() - 2);
         }
-        if (!randomChecksOkay) {
-            return "FAIL: readBodies(); Not all bodies have correct info!";
+        if (!dataCorrect) {
+            return "FAIL: readBodies() - some bodies have incorrect data!";
         }
-        return "PASS: readBodies(); Congrats! This was the hardest test!";
+        
+        return "PASS: readBodies() - all tests passed!";
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String testResult = checkReadBodies();
-        System.out.println(testResult);
+        String result = checkReadBodies();
+        System.out.println(result);
     }
 }

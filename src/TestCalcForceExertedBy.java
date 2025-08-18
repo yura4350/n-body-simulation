@@ -1,27 +1,12 @@
-
-
-import java.math.*;
-
 /**
- *  Tests calcForceExertedBy
+ * Tests the calcForceExertedBy method.
  */
 public class TestCalcForceExertedBy {
 
-    /**
-     *  Tests calcForceExertedBy.
-     */
     public static void main(String[] args) {
         checkCalcForceExertedBy();
     }
 
-    /**
-     *  Checks whether or not two Doubles are equal and prints the result.
-     *
-     *  @param  expected    Expected double
-     *  @param  actual      Double received
-     *  @param  label   Label for the 'test' case
-     *  @param  eps     Tolerance for the double comparison.
-     */
     private static void checkEquals(double actual, double expected, String label, double eps) {
         if (Math.abs(expected - actual) <= eps * Math.max(expected, actual)) {
             System.out.println("PASS: " + label + ": Expected " + expected + " and you gave " + actual);
@@ -30,10 +15,6 @@ public class TestCalcForceExertedBy {
         }
     }
 
-
-    /**
-     *  Checks the Body class to make sure calcForceExertedBy works.
-     */
     private static void checkCalcForceExertedBy() {
         System.out.println("Checking calcForceExertedBy...");
 
