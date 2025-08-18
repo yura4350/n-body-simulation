@@ -1,181 +1,274 @@
 
 
-# Project 1: NBody
+# N-Body Simulation
 
-This is the directions document for Project P1 NBody in CompSci 201 at Duke University, Fall 2024. You'll be directed in several
-places to the [details](docs/details.md) document since this explanation is more high-level.
+A Java implementation of an N-body gravitational simulation that models the motion of celestial bodies under mutual gravitational forces. This project creates beautiful animated visualizations of planetary systems, binary stars, galaxies, and other astronomical phenomena.
 
+## Overview
 
-## Background for context
+This simulation is based on Newton's laws of gravitation and motion, using numerical integration to approximate the complex gravitational interactions between multiple celestial bodies. The program reads initial conditions from data files and creates real-time animations of the resulting orbital mechanics.
 
-This assignment heavily borrows from Princeton and Berkeley Computer Science and the work of Robert Sedgewick, Kevin Wayne and Josh Hug.
+**Background:** In 1687, Isaac Newton formulated the principles governing the motion of two particles under the influence of their mutual gravitational attraction in his famous _Principia Mathematica_. However, Newton was unable to solve the problem for three particles. Indeed, in general, solutions to systems of three or more particles must be approximated via numerical simulations.
 
-**Context:** In 1687, Isaac Newton formulated the principles governing the motion of two particles under the influence of their mutual gravitational attraction in his famous _Principia Mathematica_. However, Newton was unable to solve the problem for three particles. Indeed, in general, solutions to systems of three or more particles must be approximated via numerical simulations.
-For a more complete understanding of the Physics you can reference [this document][Physics].
+This program simulates the motion of _N_ objects in a plane, mutually affected by gravitational forces, and animates the results. Such methods are widely used in cosmology, semiconductors, and fluid dynamics to study complex physical systems. The simulation consists of a driver program `NBody.java` that runs the simulation and creates an animation of bodies moving in space interacting with each other subject to mutual gravitational forces. These bodies are modeled by the class `CelestialBody.java`.
 
-In this assignment, you will write a program to simulate the motion of _N_ objects in a plane, mutually affected by gravitational forces, and animate the results. Such methods are widely used in cosmology, semiconductors, and fluid dynamics to study complex physical systems. Ultimately, you will be creating a driver program `NBody.java` that runs the simulation and creates an animation of bodies moving in space interacting with each other subject to mutual gravitational forces. These bodies are modeled by the class `CelestialBody.java` that you'll implement and test independently of the simulation.
+Below you can see an animation of the simulation running with some planets in our solar system.
 
-Below you can see an animation of a completed project running with some planets in our solar system. The animation repeats after one earth year, your program continues until the simulation completes.
-
-### Example Simulation of Complete Project
+### Example Simulation
 
 <div align="center">
-  <img width="500" height="500" src="p1-figures/planets.gif">
+  <img width="500" height="500" src="figures/planets.gif">
 </div>
 
+### Features
 
-## Starter Code and Using Git
+- **Real-time animation** of gravitational interactions
+- **Multiple simulation scenarios** including solar systems, binary stars, galaxies, and chaotic systems
+- **Accurate physics modeling** using Newton's laws of gravitation
+- **Custom visualization** with planetary images and smooth animation
+- **Configurable simulations** through data file input
 
-See [the details document](docs/details.md) for information on using Git, starting the project, and more details. 
+## Project Structure
 
-### Zoom Cloud Recording
-
-You should cloud record via your Duke Zoom account the first 20 minutes of you coding at the beginning of this project and submit a link to that recording. Before you proceed, we recommend that you verify that your Duke Zoom account is created (done by logging into Zoom at [duke.zoom.us](duke.zoom.us)) and that you have Cloud Recording permissions enabled by going to Settings -> Recording tab -> enabling Cloud Recording after logging in. Then sign into the Zoom app on your machine via the SSO option with "duke.zoom.us" as the Company Domain. For more details about using your Duke Zoom account, see [this link](https://oit.duke.edu/help/articles/kb0029318/).
-
-To record your screen as you code, start a New Meeting, and share your entire screen. You do not need to record yourself via your camera or audio; the screen is all we need to see. Once you have shared your screen, hit Record to Cloud. After 20 minutes, hit Stop the Recording. After you exit the meeting, Zoom will process the video in the cloud and send you an email once that the recording is available. Upon opening the link in the browser, click "Copy shareable link" on the recording to get a URL that you submit to us. **This is practice for the APT quizzes where you must record your work. Here, you should try, but you will *NOT* submit to course staff.**
-
-## Initial Engagement Points
-
-* Answer the questions on the [pre-project engagement form](https://forms.office.com/r/mFdQnyNvD5). For each question you answer correctly, you'll receive 0.5 engagement points (there are six questions). For completing the form you get 2 points as long as at least one answer is correct.
-
-## Developing, Running, Testing Code
-
-You're given the outline of a class `CelestialBody` with stub or missing methods and a missing constructor. You'll add code so that the class `CelestialBody.java` works as described below. This class represents a celestial body such as a planet or a sun.  
-
-Finally, you will create a class `NBody.java` that drives a simulation between planets, suns, and celestial bodies interacting. This class will read a file of data that specifies the initial positions and masses of the bodies and then simulates their interaction over a set time period. The simulation will also animate the interactions between the bodies.
-
-### Developing and Testing the CelestialBody Class
-
-There are classes provided in the code you get that help you **test whether your constructor, getters, and update/interaction methods are correct.** Running each `TestX` class will print *PASS* or *FAIL* messages to your terminal/console window. You should only proceed to the next step in development and coding when you've passed the current test. When these tests pass, there's a good chance your code is correct, but you may uncover additional errors when you run the `NBody` simulation.
-
-You'll implement code in `CelestialBody`, then run a testing program you're given to see if the code you wrote passes the tests. *Do not go to the next step* until your code passes each testing program.
-
-Details about developing and testing each part of `CelestialBody` are in the [details](docs/details.md) document. Each group of related methods has a corresponding test program: `TestX`, e.g., for the second bullet item below you'll write the method `calcDistance` and test your implementation by 
-running the test program `TestCalcDistance.java`.
-
-* Constructor and getter methods
-* `calcDistance` method
-* `calcForceExertedBy`
-* `calcForceExertedByX` (and Y)
-* `calcNetForceExertedByX` (and Y)
-* `update` (mutator method)
-
-All the method you've written and tested use `CelestialBody` instance variables to calculate the forces acting on each body in a simulation, and then to `update` the state of a `CelestialBody` as part of a simulation. After developing, implementing, testing, and debugging these `CelestialBody` methods you're ready to move to the simulation code.
-
-## The `NBody` Class
-
-The `NBody` class will use `CelestialBody` objects to run the simulation.
-
-This class consists only of `static` methods, including the main method that runs the simulation. Your task will be to implement the three `static` methods that have been outlined for you in the starter code. That code has `// TODO` comments indicating where you need to make edits. Details about
-the changes you must make (and test) can be found in the [details](docs/details.md) document.
-
-<div align="center">
-  <img src="p1-figures/NBodyMethods.png">
-</div>
-
-### Details on Data Format
-
-The data for planets, suns, and celestial bodies in general is in the format shown below. **All files in the folder data are in this format.** For example, this is the file `data/planets.txt`:
-
-<div align="center">
-  <img src="p1-figures/format.png">
-</div>
-
-The first value is an integer _**n**_, the number of bodies for which data is given in the file. The next value is a `double`, the radius of the universe for the simulation. This value is used to set the scale for the animation.
-
-Next, there are _**n**_ lines, one line for each `CelestialBody`. Each line contains six values as shown above. The first five values are `doubles`: the first two are initial x and y coordinates; the next two are initial x and y velocities; the next is the mass of the `CelestialBody`. The last value on a line is a `String` specifying the file in the images folder used for the animation of the simulation.
-
-You will need to understand this format to write the methods `readRadius` and `readBodies` that create the simulated universe and each `CelestialBody` in a simulation. 
-
-
-## NBody Methods
-
-This section provides a high-level overview of each of the three `static` methods you need to implement for the `NBody` class. The details of each method are found in the [details](docs/details.md) docuoment.
-
-### The method NBody.readRadius
-
-Given a file name, this method should return a double corresponding to the radius of the universe in that file, e.g. `readRadius("./data/planets.txt")` should return $`2.50 \cdot 10 ^{11}`$ (alternatively, 2.50e+11). As described in the [details](docs/details.md) document, you'll need to create a `Scanner`, bound to the specified `File`, and read and return the radius of the simulated universe. There's a `TestReadRadius.java` program to see if your code passes tests. When you've passed this test, proceed to the next static method below.
-
-
-
-### The method NBody.readBodies
-
-This method returns an array of `CelestialBody` objects using the data read from the file. For example, `readBodies("./data/planets.txt")` should return an array of 5 `CelestialBody` objects. See the [details](docs/details.md) details document for more information. Note that you'll need to create an array, read data from a file/scanner, create new `CelestialBody` objects with references in the created array, then return the array.  
-
-### The method NBody.main
-
-You'll see four TODO comments in the static `main` method: one before the loop, and three within the loop. Completing these will make your simulation run correctly and provide an animation of the simulation. The four TODOs are described in the [details](docs/details.md) document.
-
-
-## Note on Running the Simulation
-
-When the simulation is over your code prints out the final state of the universe in the same format as the input, you can expand below for an example of the output for `data/planets.txt`.
-
-
-<summary>Example Simulation Output</summary>
-
-|             |             |             |           |           |          |
-| :---        |    :----:   |       :---: |  :---:    | :---:     | ---:     |
-| 5           |             |             |           |           |          |
-| 2.50e+11  |            |             |             |           |           |
-| 1.4631e+09 | 1.4943e+11 | -2.9831e+04 | 4.0749e+02 | 5.9740e+24 |earth.gif |
-|-1.1174e+11 |-1.9803e+11 |  2.0989e+04 | -1.1953e+04 |  6.4190e+23 |   mars.gif |
-| 2.4125e+10 | 5.2103e+10 | -4.3685e+04 | 2.0627e+04 | 3.3020e+23 | mercury.gif |
-| 5.6664e+05 | 7.0808e+06 | 1.0861e-01 | 1.0639e-01 | 1.9890e+30  |    sun.gif |
-| 1.0555e+11 | 2.3363e+10 |-7.5708e+03 | 3.4204e+04 | 4.8690e+24 |   venus.gif |
-
-
-The code for printing is given to you in the `NBody.java` you start with. This code isn't all that exciting (which is why we've provided a solution), but we'll need this method to work correctly to autograde your assignment. ***You should NOT print anything other than the final printing shown here***. This printing is done after your simulation completes. *If you use debugging print statements, be sure to remove them before testing in Gradescope.*
-
-When the simulation finishes, you'll need to close/quit the graphics window to be able to run another simulation. Use the red X button in the upper left of the graphics window to dismiss the window.
-
-### Warnings
-
-On a mac, you may see this warning printed in the console/debug window each time you run the program:
 ```
-java[81197:838423] WARNING: Secure coding is not enabled for restorable state! Enable secure coding by implementing NSApplicationDelegate.applicationSupportsSecureRestorableState: and returning YES.
+planet-simulation/
+├── src/                    # Source code
+│   ├── CelestialBody.java  # Individual celestial body class
+│   ├── NBody.java          # Main simulation driver
+│   ├── StdDraw.java        # Graphics library
+│   └── Test*.java          # Unit test classes
+├── data/                   # Simulation scenarios
+│   ├── planets.txt         # Our solar system
+│   ├── binary.txt          # Binary star system
+│   ├── galaxy.txt          # Galaxy formation
+│   └── ...                 # Many more scenarios
+├── images/                 # Celestial body graphics
+└── figures/                # Documentation images
 ```
-It's safe to ignore this warning, it's related to improved security for mac GUI applications released commercially. Not relevant here.
+
+## Implementation Details
+
+The simulation consists of two main classes:
+
+- **`CelestialBody.java`**: Represents individual celestial bodies such as planets or stars
+- **`NBody.java`**: The main simulation driver that reads data files and runs the animation
+
+The simulation reads initial conditions from data files and then simulates gravitational interactions over time, creating beautiful animations of orbital mechanics.
+
+### CelestialBody Class
+
+The `CelestialBody` class represents individual astronomical objects with:
+
+- **Position**: x, y coordinates
+- **Velocity**: x, y velocity components  
+- **Mass**: gravitational mass
+- **Image**: visual representation
+
+Key methods include:
+
+- `calcDistance()` - Euclidean distance between bodies
+- `calcForceExertedBy()` - Gravitational force calculation
+- `calcForceExertedByX/Y()` - Force components
+- `calcNetForceExertedByX/Y()` - Net force from all other bodies
+- `update()` - Position and velocity integration
+
+These methods use physics calculations to determine gravitational forces and update object positions during the simulation.
+
+### NBody Class
+
+The main simulation driver that:
+- Reads simulation data from files
+- Manages the simulation loop
+- Handles graphics and animation
+- Implements numerical integration
+
+## Physics Implementation
+
+### Gravitational Force
+
+The simulation uses Newton's law of universal gravitation:
+
+```
+F = G * m₁ * m₂ / r²
+```
+
+Where:
+- `G` = 6.67 × 10⁻¹¹ (gravitational constant)
+- `m₁, m₂` = masses of the two bodies
+- `r` = distance between bodies
+
+### Force Components
+
+Force is decomposed into x and y components:
+
+```
+Fₓ = F * (dx / r)
+Fᵧ = F * (dy / r)
+```
+
+### Numerical Integration
+
+The simulation uses Euler's method for integration:
+
+1. Calculate acceleration: `a = F / m`
+2. Update velocity: `v_new = v_old + a * dt`
+3. Update position: `x_new = x_old + v_new * dt`
+
+## Data Format
+
+Simulation files follow this format:
+
+```
+[number of bodies]
+[universe radius]
+[x_pos] [y_pos] [x_vel] [y_vel] [mass] [image_file]
+...
+```
+
+Example (`data/planets.txt`):
+```
+5
+2.50e11
+1.4960e11  0.0000e00  0.0000e00  2.9800e04  5.9740e24  earth.gif
+-1.1055e11 -1.9868e11 2.0336e04 -1.1783e04  6.4190e23  mars.gif
+...
+``` 
 
 
-## Analysis Questions
+## How to Run
 
-Answer the following questions in your analysis. You'll submit your analysis as a separate PDF as a separate assignment to Gradescope. You can earn +2 extra points on this assignment (or you can use them as engagement points) if you [use this .docx template](https://courses.cs.duke.edu/compsci201/fall24/assign/p1nbody-analysis.docx) for answering the questions, and identifying questions as asked for when uploading to Gradescope. You'll need to upload a PDF, print and save after editing the .docx.
+### Prerequisites
+- Java Development Kit (JDK) 8 or higher
+- Terminal/Command Prompt
+
+### Compilation and Execution
+
+1. **Navigate to the project directory:**
+   ```bash
+   cd /path/to/planet-simulation
+   ```
+
+2. **Compile the Java files:**
+   ```bash
+   javac src/*.java
+   ```
+
+3. **Run the simulation:**
+   ```bash
+   java -cp src NBody
+   ```
+
+### Alternative Method
+
+Run from the src directory:
+```bash
+cd src
+javac *.java
+java NBody
+```
 
 
-### Question 1 (1 point)
+## Available Simulations
 
-If there are $`n`$ `CelestialBody` objects, how  many _total_ times will the code have to execute the `calcForceExertedByX` method per time step (that is, per iteration of the outer loop of the main method) of the simulation? Your answer should be in terms of $`n`$. Briefly explain your answer. Note that the method `calcForceExertedByX` is called *indirectly* from the time-step loop, as a result of calling `calcNetForceExertedByX` (note the *Net*).
+The `data/` folder contains numerous pre-configured scenarios:
 
-### Question 2 (1 point)
+| File | Description |
+|------|-----------|
+| `planets.txt` | Our solar system |
+| `binary.txt` | Binary star system |
+| `galaxy.txt` | Galaxy formation |
+| `chaosblossom.txt` | Chaotic orbital patterns |
+| `atom.txt` | Atomic-like simulation |
+| `entropy-universe.txt` | High-entropy system |
+| `kaleidoscope.txt` | Symmetric patterns |
+| `massive-squirrel-battle.txt` | Fun scenario |
 
-In terms of `totalTime` and `dt`, how many total time steps (that is, iterations of the outer loop of the main method) will there be in the simulation? Briefly explain your answer. Based on this, would increasing the value of `dt` increase, decrease, or have no impact on computational resources necessary to run a complete simulation?
+## Output
 
-### Question 3 (2 points)
+When the simulation completes, it prints the final state of all bodies:
 
-`dt`was initially set to `25000.0`. Change this value to `1000000.0` (one million) and run the simulation again. You should see behavior inconsistent with what is expected for the simulation using `planets.txt`. Briefly explain why increasing the value of `dt` could cause this behavior.
+```
+5
+2.50e11
+1.4631e09  1.4943e11 -2.9831e04  4.0749e02  5.9740e24  earth.gif
+-1.1174e11 -1.9803e11 2.0989e04 -1.1953e04  6.4190e23  mars.gif
+...
+```
 
-### Question 4 (4 points)
+## Testing
 
-Read [Making data visualization more accessible for blind and low-vision individuals](https://news.mit.edu/2022/data-visualization-accessible-blind-0602), and summarize in one paragraph the main ideas in the paper. In another paragraph relate the work you've done with this visualization to the ideas in that article and how you might make the results of this simulation more effective for blind or low-vision people.
+The project includes comprehensive unit tests:
 
-### Question 5 (2 points)
+```bash
+java -cp src TestBodyConstructorGetters
+java -cp src TestCalcDistance
+java -cp src TestCalcForceExertedBy
+java -cp src TestCalcForceExertedByXY
+java -cp src TestCalcNetForceExertedByXY
+java -cp src TestUpdate
+java -cp src TestReadRadius
+java -cp src TestReadBodies
+```
 
-Run the simulation for two data files other than `planets.txt` and describe what you see for each one you choose. Be brief, but thorough.
+## Dependencies
+
+This project uses only one external library:
+- **StdDraw.java**: A simple graphics library for Java animations and visualizations
+
+All physics calculations and simulation logic are implemented from scratch.
 
 
-## Submitting and Grading
-You will submit the assignment on Gradescope. You can access Gradescope through the tab on Canvas. The [project workflow writeup](https://coursework.cs.duke.edu/201fall24/resources-201/-/blob/main/projectWorkflow.md) explains the how to submit your project in detail. Be sure to push changes often and be sure your final program is in your Git repository before you submit it for autograding on Gradescope. Please take note that changes/commits on GitLab are NOT automatically synced to Gradescope. You are welcome to submit as many times as you like, only the most recent submission will count for a grade.
+## Technical Details
 
-Don't forget to upload a PDF for the analysis part of this assignment and mark where you answer each question. This is a separate submission in Gradescope.
+### Performance Considerations
 
-| Project Part | Points |
-| ------ | ------ |
-| CelestialBody | 10 |
-| NBody | 10 |
-| Analysis | 10 |
+- **Time Complexity**: O(n²) per time step for n bodies
+- **Integration Method**: Euler's method with configurable time step
+- **Collision Detection**: Bodies can pass through each other (gravitational simulation only)
 
-[Physics]:https://docs.google.com/document/d/1LRRW970ZwgZQtsif1L1SfRBTlB_VUGJAZKYol-DHGWE/edit?usp=sharing
+### Accuracy and Stability
+
+- Smaller time steps (`dt`) provide better accuracy but slower performance
+- Large time steps can cause numerical instability
+- The simulation assumes point masses (no collision handling)
+
+## Educational Value
+
+This project demonstrates:
+- **Object-oriented programming** principles
+- **Numerical simulation** techniques
+- **Physics modeling** in software
+- **Algorithm complexity** analysis
+- **Scientific computing** methods
+
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Graphics window doesn't appear**: Ensure Java has GUI permissions
+2. **Simulation runs too fast/slow**: Adjust the `dt` parameter in the code
+3. **Mac security warning**: Safe to ignore warnings about "Secure coding"
+
+### Performance Tips
+
+- Use smaller universe files for faster testing
+- Increase `dt` for faster (less accurate) simulations
+- Decrease `dt` for more accurate (slower) simulations
+
+## Future Enhancements
+
+Potential improvements could include:
+- Adaptive time stepping
+- Collision detection and response
+- 3D visualization
+- Relativistic effects
+- Barnes-Hut algorithm for better performance
+- Interactive parameter adjustment
+
+## License
+
+This project is for educational purposes. The StdDraw library maintains its own licensing terms.
 
 
 
